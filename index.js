@@ -89,8 +89,6 @@ function prompt(server, info = "update config") {
 
 async function init() {
   const { server, info } = await prompt(getContent().server);
-  console.log(server);
-  console.log(info);
   writeContent({ server });
   await gitPush(info);
 }
