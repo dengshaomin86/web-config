@@ -2,9 +2,12 @@
  * 自动提交 git
  */
 
-const fs = require("fs");
-const { exec } = require("child_process");
-const inquirer = require("inquirer").default;
+// const fs = require("fs");
+// const { exec } = require("child_process");
+// const inquirer = require("inquirer").default;
+import fs from "fs";
+import inquirer from "inquirer";
+import { exec } from "child_process";
 
 async function runcommand(command) {
   return new Promise((resolve, reject) => {
