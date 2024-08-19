@@ -7,15 +7,35 @@ const { exec } = require("child_process");
 const inquirer = require("inquirer").default;
 
 async function runcommand(command) {
-  return new Promise((reslove) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`执行 Git 初始化命令时出错：${error}`);
-        reslove(false);
-        return;
+  return new Promise((resolve, reject) => {
+    // exec(command, (error, stdout, stderr) => {
+    //   if (error) {
+    //     reject(`执行 Git 初始化命令时出错：${error}`);
+    //     return;
+    //   }
+    //   console.log(`Git 初始化成功：${stdout}`);
+    //   resolve(true);
+    // });
+
+    const workerProcess = exec(command);
+    let message = "";
+    // 打印正常的后台可执行程序输出
+    workerProcess.stdout?.on("data", function (data) {
+      console.log("stdout: " + data);
+    });
+    // 打印错误的后台可执行程序输出
+    workerProcess.stderr?.on("data", function (data) {
+      console.log("stderr: " + data);
+      message = data;
+    });
+    // 退出之后的输出
+    workerProcess.on("close", function (code) {
+      console.log("out code: " + code);
+      if (code === 0) {
+        resolve(true);
+      } else {
+        reject(message);
       }
-      console.log(`Git 初始化成功：${stdout}`);
-      reslove(true);
     });
   });
 }
@@ -25,10 +45,14 @@ async function runcommand(command) {
  */
 async function gitPush(info = "init") {
   console.time("push");
-  await runcommand(`git add .`);
-  await runcommand(`git commit -m '${info}'`);
-  await runcommand(`git pull`);
-  await runcommand(`git push`);
+  try {
+    await runcommand(`git add .`);
+    await runcommand(`git commit -m '${info}'`);
+    await runcommand(`git pull`);
+    await runcommand(`git push`);
+  } catch (err) {
+    console.log(err);
+  }
   console.timeEnd("push");
 }
 
