@@ -2,9 +2,6 @@
  * 自动提交 git
  */
 
-// const fs = require("fs");
-// const { exec } = require("child_process");
-// const inquirer = require("inquirer").default;
 import fs from "fs";
 import inquirer from "inquirer";
 import { exec } from "child_process";
@@ -14,10 +11,10 @@ async function runcommand(command) {
   return new Promise((resolve, reject) => {
     // exec(command, (error, stdout, stderr) => {
     //   if (error) {
-    //     reject(`执行 Git 初始化命令时出错：${error}`);
+    //     reject(error);
     //     return;
     //   }
-    //   console.log(`Git 初始化成功：${stdout}`);
+    //   console.log(stdout);
     //   resolve(true);
     // });
 
