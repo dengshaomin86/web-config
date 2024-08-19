@@ -20,17 +20,17 @@ async function runcommand(command) {
     const workerProcess = exec(command);
     let message = "";
     // 打印正常的后台可执行程序输出
-    workerProcess.stdout?.on("data", function (data) {
+    workerProcess.stdout?.on("data", (data) => {
       console.log("stdout: " + data);
     });
     // 打印错误的后台可执行程序输出
-    workerProcess.stderr?.on("data", function (data) {
+    workerProcess.stderr?.on("data", (data) => {
       console.log("stderr: " + data);
       message = data;
     });
     // 退出之后的输出
-    workerProcess.on("close", function (code) {
-      console.log("out code: " + code);
+    workerProcess.on("close", (code) => {
+      console.log(`out code - ${command}: ${code}`);
       if (code === 0) {
         resolve(true);
       } else {
@@ -46,10 +46,10 @@ async function runcommand(command) {
 async function gitPush(info = "init") {
   console.time("push");
   try {
-    await runcommand(`git add .`);
-    await runcommand(`git commit -m '${info}'`);
-    await runcommand(`git pull`);
-    await runcommand(`git push`);
+    await runcommand("git add .");
+    await runcommand(`git commit -m "${info}"`);
+    await runcommand("git pull");
+    await runcommand("git push");
   } catch (err) {
     console.log(err);
   }
