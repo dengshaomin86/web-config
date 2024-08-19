@@ -8,6 +8,7 @@
 import fs from "fs";
 import inquirer from "inquirer";
 import { exec } from "child_process";
+import logger from "./logger.js";
 
 async function runcommand(command) {
   return new Promise((resolve, reject) => {
@@ -24,16 +25,16 @@ async function runcommand(command) {
     let message = "";
     // 打印正常的后台可执行程序输出
     workerProcess.stdout?.on("data", (data) => {
-      console.log("stdout: " + data);
+      logger.info("stdout: " + data);
     });
     // 打印错误的后台可执行程序输出
     workerProcess.stderr?.on("data", (data) => {
-      console.log("stderr: " + data);
+      logger.error("stderr: " + data);
       message = data;
     });
     // 退出之后的输出
     workerProcess.on("close", (code) => {
-      console.log(`out code - ${command}: ${code}`);
+      logger.info(`out code - ${command}: ${code}`);
       if (code === 0) {
         resolve(true);
       } else {
@@ -54,7 +55,7 @@ async function gitPush(info = "init") {
     await runcommand("git pull");
     await runcommand("git push");
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
   console.timeEnd("push");
 }
